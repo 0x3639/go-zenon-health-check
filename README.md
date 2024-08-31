@@ -1,5 +1,4 @@
 
-```markdown
 # Health Check Service
 
 This Python service runs a health check by making a POST request to a specified endpoint every minute and provides a health status via an HTTP API.
