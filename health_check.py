@@ -25,7 +25,9 @@ def run_health_check():
 
     try:
         # Send the POST request with a 5-second timeout
+        logging.info("Sending health check request...")
         response = requests.post(url, headers=headers, json=payload, timeout=5)
+        logging.info(f"Received response: {response.status_code}")
         response.raise_for_status()  # Raise an HTTPError for bad responses
 
         # Parse the JSON response
