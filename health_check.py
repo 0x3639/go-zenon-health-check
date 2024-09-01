@@ -5,6 +5,8 @@ import json
 import logging
 from flask import Flask, jsonify
 import logging.handlers
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 
@@ -15,6 +17,13 @@ syslog_handler.setFormatter(formatter)
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logger.addHandler(syslog_handler)
+
+# Configure rate limiting
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["1 per 15 seconds"]  # Limit requests to 1 per 15 seconds per IP
+)
 
 # Configuration
 CHECK_INTERVAL = 60  # Health check interval in seconds
@@ -53,12 +62,7 @@ def run_health_check():
             health_status = 500
             logger.error(f"Unknown state encountered: {state}, JSON: {json.dumps(response_json)}")
 
-    except requests.exceptions.Timeout:
-        logger.error("Health check timed out after 5 seconds")
-        health_status = 500
-        last_response_json = {"error": "timeout"}
-
-    except requests.exceptions.RequestException as e:
+    except (requests.exceptions.Timeout, requests.exceptions.RequestException) as e:
         logger.error(f"Error during health check: {e}")
         health_status = 500
         last_response_json = {"error": str(e)}
@@ -72,6 +76,7 @@ def start_periodic_health_check():
 threading.Thread(target=start_periodic_health_check, daemon=True).start()
 
 @app.route('/health', methods=['GET'])
+@limiter.limit("1 per 15 seconds")
 def health():
     return jsonify(last_response_json), health_status
 
