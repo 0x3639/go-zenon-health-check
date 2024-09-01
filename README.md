@@ -110,14 +110,20 @@ sudo systemctl status health_check.service
 
 ### 6. Logs
 
-Logs for the service are written to `health_check.log` in the project directory. To view the logs:
+Logs for the service are written to the system's syslog, which is typically located at `/var/log/syslog`. You can view the logs using:
 
 ```bash
-tail -f health_check.log
+sudo tail -f /var/log/syslog
 ```
 
-You can also view systemd logs for the service:
+The logs will include:
+- The result of each health check, including the full JSON response.
+- Errors encountered during the health check, along with relevant details.
+
+### 7. API Usage
+
+- **Health Check Endpoint**: The health status and the latest JSON response from the health check can be accessed via the `/health` endpoint.
 
 ```bash
-sudo journalctl -u health_check.service
+curl http://your-server-address:5000/health
 ```
