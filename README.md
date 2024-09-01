@@ -1,4 +1,4 @@
-# Health Check Service
+# go-zenon Health Check Service
 
 This Python service performs periodic health checks of `go-zenon` by sending requests to an endpoint and provides a health status via an HTTP API.
 
@@ -23,8 +23,8 @@ This Python service performs periodic health checks of `go-zenon` by sending req
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/0x3639/health-check-service.git
-cd health-check-service
+git clone https://github.com/0x3639/go-zenon-health-check.git
+cd go-zenon-health-check
 ```
 
 ### 2. Create a Virtual Environment
