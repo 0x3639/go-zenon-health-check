@@ -23,7 +23,7 @@ This Python service runs a health check by making a POST request to a specified 
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/health-check-service.git
+git clone https://github.com/0x3639/health-check-service.git
 cd health-check-service
 ```
 
